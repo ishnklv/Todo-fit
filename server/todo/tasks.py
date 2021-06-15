@@ -11,7 +11,7 @@ import datetime
 def send_email_task():
     posts = Task.objects.all()
     now = datetime.datetime.now().replace(microsecond=0)
-    print(str(now) + " --- " + str(posts[0]))
+    print(str(now) + " --- " + str(posts))
     for post in posts:
         if post.date == now:
             send_mail('Notifiaction Todoist', f'Салам Алейкум! {post.user.first_name}\n Время вашего задания '
