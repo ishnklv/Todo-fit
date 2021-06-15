@@ -3,7 +3,6 @@ from server import settings
 from todo.models import Task
 from django.utils import timezone
 from celery import shared_task
-import datetime
 
 
 @shared_task
