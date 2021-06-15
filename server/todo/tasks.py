@@ -5,6 +5,8 @@ from django.utils import timezone
 from celery import shared_task
 import datetime
 
+# Hello dev branch
+
 @shared_task
 def send_email_task():
     posts = Task.objects.all()
