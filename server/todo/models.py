@@ -60,13 +60,38 @@ class Label(models.Model):
 
 
 class Task(models.Model):
-    user = models.ForeignKey(UserAccount, related_name='tasks', on_delete=models.CASCADE)
+    REMIND = (
+        (5, '5 min'),
+        (10, '10 min'),
+        (15, '15 min'),
+        (30, '30 min'),
+    )
+    PRIORITY = (
+        ('high', 'High'),
+        ('normal', 'Normal'),
+        ('low', 'Low')
+    )
+    user = models.ForeignKey('UserAccount', related_name='tasks', on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     completed = models.BooleanField(default=False)
     image = models.ImageField(upload_to='images/', null=True, blank=True)
-    date = models.DateTimeField()
+    date = models.DateTimeField(blank=True, null=True)
     parent = models.ForeignKey('self', related_name="children", on_delete=models.CASCADE, null=True, blank=True)
     label = models.ForeignKey('Label', related_name='labels', on_delete=models.CASCADE, null=True, blank=True)
+    is_notific = models.BooleanField(default=False)
+    remind = models.IntegerField(choices=REMIND)
+    priority = models.CharField(choices=PRIORITY, max_length=50)
+    ordering = models.BigIntegerField(default=0)
 
     def __str__(self):
         return self.title
+
+
+class Comment(models.Model):
+    task = models.ForeignKey(Task, related_name='comments', on_delete=models.CASCADE)
+    user = models.ForeignKey(UserAccount, related_name='task', on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return 'Comment by {} on {}'.format(self.user, self.task)

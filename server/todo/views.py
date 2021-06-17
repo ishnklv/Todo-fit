@@ -2,9 +2,9 @@ from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from django_filters import rest_framework as filtersio
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .models import Task, Label
+from .models import Task, Label, Comment
 from .permissions import IsOwnerOrReadOnly
-from .serializers import TaskSerializer, LabelSerializer
+from .serializers import TaskSerializer, LabelSerializer, CommentSerializer
 from django import forms
 from rest_framework import filters
 
@@ -32,6 +32,19 @@ class TaskViewSet(viewsets.ModelViewSet):
     permission_classes = [IsOwnerOrReadOnly, ]
     authentication_classes = [JWTAuthentication, ]
     ordering_fields = ['title', 'date', 'completed', 'id']
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return self.queryset.filter(user=self.request.user)
+        return Task.objects.none()
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
