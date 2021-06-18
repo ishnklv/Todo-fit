@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'rest_framework_simplejwt.token_blacklist',
     'django_filters',
+    'fcm_django',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -188,3 +190,12 @@ DJOSER = {
         'user_delete': 'djoser.serializers.UserDeleteSerializer',
     }
 }
+
+
+FCM_DJANGO_SETTINGS = {
+        "FCM_SERVER_KEY": "AAAAUBWqdfo:APA91bEm3ib6_TlLIJ5YpAU6BjyQ7X9GoXeghkgqiBwNPPkr_FP9NjdhVk8EZqCUvgWUIf2vhk5eUnSkJELy7JtJfv1qOGM_UZtxu0FI3BkpUQMxdX-aO3xdvfTKteAkbAc2vXy1xCXu"
+}
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_CREDENTIALS = True

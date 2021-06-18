@@ -4,13 +4,14 @@ from todo.models import Task
 from django.utils import timezone
 from celery import shared_task
 from datetime import datetime, timedelta
-
+from fcm_django.models import FCMDevice
 
 # Hello dev branch
 
 @shared_task
 def send_email_task():
     posts = Task.objects.filter(completed=False).filter(is_notific=False)
+    device = FCMDevice.objects.all().first()
     now = datetime.now().replace(microsecond=0)
     for post in posts:
         post_date = post.date - timedelta(minutes=post.remind)
@@ -20,5 +21,6 @@ def send_email_task():
                       f'Привет! {post.user.first_name}\n У вас осталось 15 минут, чтобы успеть выполнить задание'
                       f'\n <<{post.title}>>', settings.EMAIL_HOST_USER,
                       [post.user], fail_silently=False)
+            device.send_message(title="Comma", body="Free tier")
             post.is_notific = True
         print(str(post.is_notific))
