@@ -15,7 +15,7 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 app.conf.beat_schedule = {
     'every-10-seconds': {
         'task': 'todo.tasks.send_email_task',
-        'schedule': 10,
+        'schedule': 10.0,
     }
 }
 

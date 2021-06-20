@@ -51,14 +51,6 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
-class Label(models.Model):
-    user = models.ForeignKey(UserAccount, related_name='labels', on_delete=models.CASCADE)
-    title = models.CharField(max_length=20)
-
-    def __str__(self):
-        return self.title
-
-
 class Task(models.Model):
     REMIND = (
         (5, '5 min'),
@@ -77,11 +69,21 @@ class Task(models.Model):
     image = models.ImageField(upload_to='images/', null=True, blank=True)
     date = models.DateTimeField(blank=True, null=True)
     parent = models.ForeignKey('self', related_name="children", on_delete=models.CASCADE, null=True, blank=True)
-    label = models.ForeignKey('Label', related_name='labels', on_delete=models.CASCADE, null=True, blank=True)
     is_notific = models.BooleanField(default=False)
-    remind = models.IntegerField(choices=REMIND)
-    priority = models.CharField(choices=PRIORITY, max_length=50)
+    remind = models.IntegerField(choices=REMIND, null=True, blank=True)
+    priority = models.CharField(choices=PRIORITY, max_length=50, null=True, blank=True)
     ordering = models.BigIntegerField(default=0)
+    def __str__(self):
+        return self.title
+
+    # class Meta:
+    #     ordering = ('ordering')
+
+
+class Tag(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserAccount, related_name='tags', on_delete=models.CASCADE)
+    title = models.CharField(max_length=20)
 
     def __str__(self):
         return self.title
@@ -90,7 +92,7 @@ class Task(models.Model):
 class Comment(models.Model):
     task = models.ForeignKey(Task, related_name='comments', on_delete=models.CASCADE)
     user = models.ForeignKey(UserAccount, related_name='task', on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
+    title = models.TextField()
     date = models.DateTimeField(auto_now=True)
 
     def __str__(self):

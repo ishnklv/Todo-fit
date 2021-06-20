@@ -18,7 +18,7 @@ class ChildTaskSerializer(serializers.ModelSerializer):
         fields = ('user', 'id', 'title', 'completed', 'image', 'date', 'parent', 'is_notific', 'remind')
 
 
-class LabelSerializer(serializers.ModelSerializer):
+class TagSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.first_name', required=False)
 
     class Meta:
@@ -28,6 +28,7 @@ class LabelSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.first_name', required=False)
+
     class Meta:
         model = Comment
         fields = ('id', 'user', 'title', 'date')
@@ -36,9 +37,9 @@ class CommentSerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     children = ChildTaskSerializer(many=True, required=False)
     user = serializers.ReadOnlyField(source='user.first_name', required=False)
-    labels = serializers.ReadOnlyField(source='label.title', required=False)
+    tags = TagSerializer(many=True, required=False)
     comments = CommentSerializer(many=True, required=False)
 
     class Meta:
         model = Task
-        fields = ('user', 'id', 'title', 'completed', 'image', 'date', 'children', 'parent', 'label', 'labels', 'is_notific', 'remind', 'comments')
+        fields = ('user', 'id', 'title', 'completed', 'image', 'date', 'children', 'parent', 'is_notific', 'remind', 'comments', 'labels',)

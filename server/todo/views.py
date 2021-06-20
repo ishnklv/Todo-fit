@@ -2,9 +2,9 @@ from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from django_filters import rest_framework as filtersio
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .models import Task, Label, Comment
+from .models import Task, Tag, Comment
 from .permissions import IsOwnerOrReadOnly
-from .serializers import TaskSerializer, LabelSerializer, CommentSerializer
+from .serializers import TaskSerializer, TagSerializer, CommentSerializer
 from django import forms
 from rest_framework import filters
 
@@ -55,11 +55,11 @@ class CommentViewSet(viewsets.ModelViewSet):
         return Task.objects.none()
 
 
-class LabelViewSet(viewsets.ModelViewSet):
+class TagViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend, )
     filter_fields = ('title', )
-    queryset = Label.objects.all()
-    serializer_class = LabelSerializer
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
     permission_classes = [IsOwnerOrReadOnly, ]
     authentication_classes = [JWTAuthentication, ]
 

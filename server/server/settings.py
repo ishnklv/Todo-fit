@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -126,7 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-DATETIME_FORMAT = '%d-%m-%Y %H:%M:%S'
+DATETIME_FORMAT = '%d-%m-%Y %H:%M'
 
 TIME_ZONE = 'Asia/Bishkek'
 
@@ -166,12 +167,14 @@ REST_FRAMEWORK = {
 }
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT',),
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'AUTH_TOKEN_CLASSES': (
         'rest_framework_simplejwt.tokens.AccessToken',
     )
 }
+DOMAIN = ('localhost:3000')
+SITE_NAME = ('Todo-Fit')
 DJOSER = {
     'LOGIN_FIELD': 'email',
     'USER_CREATE_PASSWORD_RETYPE': True,
@@ -193,9 +196,12 @@ DJOSER = {
 
 
 FCM_DJANGO_SETTINGS = {
-        "FCM_SERVER_KEY": "AAAAUBWqdfo:APA91bEm3ib6_TlLIJ5YpAU6BjyQ7X9GoXeghkgqiBwNPPkr_FP9NjdhVk8EZqCUvgWUIf2vhk5eUnSkJELy7JtJfv1qOGM_UZtxu0FI3BkpUQMxdX-aO3xdvfTKteAkbAc2vXy1xCXu"
+        "FCM_SERVER_KEY": "AAAA_4fcSy8:APA91bF1bmribOYqlhDMpG0KCc0diyMz-G-fHD4DZBKo0dN5HWxfVcGjMUq-pxDWJeCS3aSVEzTnDLJj7KbfCALGF9JkkuVMVZOh7MfTpmIHMVuXiYmu-NOLIYuZsPnWf0idWuG6tVwT"
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
